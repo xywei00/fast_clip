@@ -108,11 +108,11 @@ def main(args):
         os.makedirs(log_base_path, exist_ok=True)
         log_filename = f'out-{args.rank}' if args.log_local else 'out.log'
         args.log_path = os.path.join(log_base_path, log_filename)
-        if os.path.exists(args.log_path) and not resume_latest and args.resume is None:
-            print(
-                "Error. Experiment already exists. Use --name {} to specify a new experiment."
-            )
-            return -1
+        # if os.path.exists(args.log_path) and not resume_latest and args.resume is None:
+        #     print(
+        #         "Error. Experiment already exists. Use --name {} to specify a new experiment."
+        #     )
+        #     return -1
 
     # Setup text logger
     args.log_level = logging.DEBUG if args.debug else logging.INFO
