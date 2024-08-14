@@ -86,3 +86,59 @@ mpirun -n "${world_size}" -l python -u src/training/main.py \
     --lr 1e-3 --lr_tau 2e-4 --lr_tau_scheduler step_thresh --rho 6.5 \
     --gamma 0.2 --gamma_schedule cosine --gamma_decay_epochs 18
 ```
+
+**Non-Slurm**: For non-slurm single-node training, we need to change `MASTER_ADDR` and explicitly set `WORLD_SIZE`, the following is a sample script to run the program on 2 PVC GPUs.
+```bash
+#!/bin/bash
+
+##### load intel lib
+oneapi_2024_0='/sw/hprc/sw/oneAPI/2024.0'
+oneapi_2024_1='/sw/hprc/sw/oneAPI/2024.1'
+source "${oneapi_2024_1}"/compiler/latest/env/vars.sh
+source "${oneapi_2024_0}"/mkl/latest/env/vars.sh
+source "${oneapi_2024_1}"/ccl/latest/env/vars.sh
+source "${oneapi_2024_1}"/mpi/latest/env/vars.sh
+
+##### activate conda env
+__conda_setup="$('/sw/eb/sw/Miniconda3/23.5.2-0/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/sw/eb/sw/Miniconda3/23.5.2-0/etc/profile.d/conda.sh" ]; then
+        . "/sw/eb/sw/Miniconda3/23.5.2-0/etc/profile.d/conda.sh"
+    else
+        export PATH="/sw/eb/sw/Miniconda3/23.5.2-0/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+conda activate fastclip
+
+##### distributed training
+export MASTER_ADDR='127.0.0.1'
+export MASTER_PORT=12805
+world_size=2
+export WORLD_SIZE="${world_size}"
+
+##### program-specfic environment variable
+export PYTHONPATH="$PYTHONPATH:$PWD/src"
+export HUGGINGFACE_HUB_CACHE='./checkpoints/huggingface'
+
+mpirun -np "${world_size}" -l python -u src/training/main.py \
+    --save-frequency 1 \
+    --train-data './datasets/cc3m_webdataset/cc3m_train/{00000..00331}.tar' \
+    --train-num-samples 2723840 --data_size 3318333 \
+    --warmup 10000 \
+    --batch-size 128 \
+    --epochs 37 \
+    --workers 6 \
+    --dist-backend ccl \
+    --model ViT-B-32 \
+    --name medium_fastclipv3 \
+    --seed 2024 \
+    --profile \
+    --wd 0.1 \
+    --local-loss \
+    --fastclip --multiply_tau --temperature_scheme global_learnable \
+    --lr 1e-3 --lr_tau 2e-4 --lr_tau_scheduler step_thresh --rho 6.5 \
+    --gamma 0.2 --gamma_schedule cosine --gamma_decay_epochs 18
+```
