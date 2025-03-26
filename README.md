@@ -25,7 +25,7 @@ for i in {0..6}; do tar xf part0${i}.tar; rm part0${i}.tar; done
 cd -
 ```
 
-To train a CLIP model with GCL, run the following command:
+The following command trains a ViT-B/16 CLIP model using FastCLIP on DFN on 2 GPUs, with (per-GPU) batch size 320 for 30 epochs:
 ```bash
 export PYTHONPATH="$PYTHONPATH:$PWD/src"
 export HUGGINGFACE_HUB_CACHE='./checkpoints/huggingface'
@@ -39,7 +39,7 @@ torchrun \
     --train-num-samples 1000000 --data_size 1400000 \
     --warmup 500 \
     --batch-size 320 \
-    --epochs 10 \
+    --epochs 30 \
     --workers 6 \
     --model ViT-B-16 \
     --name fastclipv3 \
@@ -48,8 +48,18 @@ torchrun \
     --local-loss \
     --fastclip --multiply_tau --temperature_scheme global_learnable \
     --lr 3.125e-4 --lr_tau 7.8125e-5 --lr_tau_scheduler step_thresh --rho 11.0 \
-    --gamma 0.9 --gamma_schedule cosine --gamma_decay_epochs 10
+    --gamma 0.9 --gamma_schedule cosine --gamma_decay_epochs 30
 ```
+
+In src/training/main.py, we create the model, optimizer, loss, dataloader, etc. And in src/training/train.py, we do the training step by step.
+
+To leverage the reference model from OpenAI, you need to create it with:
+```python
+import fast_clip
+
+ref_model, _, _ = fast_clip.create_model_and_transforms('ViT-B-32', pretrained='openai')
+```
+And modify the training pipeline accordingly.
 
 ### Evaluation
 
