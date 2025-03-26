@@ -56,9 +56,7 @@ torchrun \
 **Data**:
 ```bash
 git clone -b project git@github.com:xywei00/datacomp.git
-cd datacomp
-python download_evalsets.py ../datasets/datacomp
-cd -
+python ./datacomp/download_evalsets.py ./datasets/datacomp
 ```
 
 To evaluate a trained CLIP model, run the following command:
@@ -69,5 +67,5 @@ data_dir='./datasets/datacomp'
 arch='ViT-B-16'
 epoch=10
 
-python datacomp/evaluate.py --train_output_dir "${train_output_dir}" --data_dir "${data_dir}" --epoch "${epoch}" --arch "${arch}"
+python ./datacomp/evaluate.py --train_output_dir "${train_output_dir}" --data_dir "${data_dir}" --epoch "${epoch}" --arch "${arch}"
 ```
