@@ -3,5 +3,5 @@ requests
 open-clip-torch==2.26.1
 clip-benchmark
 scikit-learn
-datasets
+datasets==2.18.0
 wilds

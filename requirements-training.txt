@@ -8,8 +8,8 @@ ftfy
 tqdm
 pandas
 braceexpand
-huggingface_hub
-transformers
+huggingface_hub==0.22.2
+transformers==4.39.3
 timm>=0.9.5
 fsspec
 libauc
