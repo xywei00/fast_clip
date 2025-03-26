@@ -59,7 +59,7 @@ import fast_clip
 
 ref_model, _, _ = fast_clip.create_model_and_transforms('ViT-B-32', pretrained='openai')
 ```
-And modify the training pipeline accordingly.
+And modify the training pipeline accordingly. `ref_model` is an instance of `CLIP` defined in src/fast_clip/model.py, where you can find its attributes and methods.
 
 ### Evaluation
 
