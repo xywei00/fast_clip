@@ -1,0 +1,7 @@
+cloudpathlib
+requests
+open-clip-torch==2.26.1
+clip-benchmark
+scikit-learn
+datasets
+wilds
