@@ -1,4 +1,4 @@
-<h1 align="center">FastCLIP: A Suite of Optimization Techniques to <br> Accelerate CLIP Training with Limited Resources</h1>
+## Learning with Reference Model
 
 In this repo, we show how to train a CLIP model by using Global Contrastive Loss (GCL) on a 1M subset of the image-text dataset [DFN-2B](https://huggingface.co/datasets/apf1/datafilteringnetworks_2b).
 
@@ -56,7 +56,7 @@ torchrun \
 **Data**:
 ```bash
 git clone -b project git@github.com:xywei00/datacomp.git
-python datacomp/download_evalsets.py --data_dir ./datasets/datacomp
+python datacomp/download_evalsets.py ./datasets/datacomp
 ```
 
 To evaluate a trained CLIP model, run the following command:
