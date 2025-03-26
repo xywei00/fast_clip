@@ -56,7 +56,9 @@ torchrun \
 **Data**:
 ```bash
 git clone -b project git@github.com:xywei00/datacomp.git
-python datacomp/download_evalsets.py ./datasets/datacomp
+cd datacomp
+python download_evalsets.py ../datasets/datacomp
+cd -
 ```
 
 To evaluate a trained CLIP model, run the following command:
