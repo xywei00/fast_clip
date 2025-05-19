@@ -19,10 +19,7 @@ pip install -r requirements-eval.txt
 ```bash
 mkdir datasets
 # dfn_data, ~40GB
-gdown --folder --output ./datasets/ 1SEhMped23ACVRzNIdgo4aI81rONqnbzi
-cd ./datasets/dfn_data
-for i in {0..6}; do tar xf part0${i}.tar; rm part0${i}.tar; done
-cd -
+git clone git@hf.co:datasets/xwei00/csce689_spring25_data ./datasets/dfn_data
 ```
 
 The following command trains a ViT-B/16 CLIP model using FastCLIP on DFN on 2 GPUs, with (per-GPU) batch size 320 for 30 epochs:
